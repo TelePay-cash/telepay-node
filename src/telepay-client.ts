@@ -1,4 +1,4 @@
-import { UrlHelper } from './utils/enums';
+import { ApiEndpoint, ApiMethod, UrlHelper } from './utils/enums';
 import axios, { Axios, AxiosResponse } from 'axios';
 import {
     CreateInvoiceBody,
@@ -185,12 +185,12 @@ export class TelepayClient {
     /**
      * @method GET | POST
      * @return Promise<AxiosResponse<Object>>
-     * @param {'GET' | 'POST'} method
-     * @param {string} endpoint
+     * @param {ApiMethod} method
+     * @param {ApiEndpoint} endpoint
      * @param {?Object} payload
      * Generic function for perform requests to any endpoint
      */
-    public genericRequest = (method: 'GET' | 'POST', endpoint: string, payload?: Object): Promise<AxiosResponse<Object>> => {
+    public genericRequest = (method: ApiMethod, endpoint: ApiEndpoint, payload?: Object): Promise<AxiosResponse<Object>> => {
         return this.axios.request({
             method,
             url: endpoint,

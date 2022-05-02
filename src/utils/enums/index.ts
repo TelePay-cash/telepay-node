@@ -1,1 +1,2 @@
-export { UrlHelper } from './url-helper';
+export { UrlHelper, ApiEndpoint } from './url-helper';
+export { ApiMethod } from './api-method';

@@ -12,3 +12,5 @@ export enum UrlHelper {
     getWithdrawMinimum = '/getWithdrawMinimum',
     withdraw = '/withdraw'
 }
+
+export type ApiEndpoint = UrlHelper | string;
