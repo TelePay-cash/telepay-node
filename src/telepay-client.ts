@@ -182,4 +182,20 @@ export class TelepayClient {
         return this.axios.post(UrlHelper.withdraw, data);
     }
 
+    /**
+     * @method GET | POST
+     * @return Promise<AxiosResponse<Object>>
+     * @param {'GET' | 'POST'} method
+     * @param {UrlHelper} endpoint
+     * @param {?Object} payload
+     * Generic function for perform requests to any endpoint
+     */
+    public genericRequest = (method: 'GET' | 'POST', endpoint: UrlHelper, payload?: Object): Promise<AxiosResponse<Object>> => {
+        return this.axios.request({
+            method,
+            url: endpoint,
+            data: payload ?? {}
+        })
+    }
+
 }

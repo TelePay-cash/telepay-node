@@ -7,6 +7,7 @@ import {
     WithdrawBody
 } from '../src/utils/interfaces';
 import { AxiosResponse } from 'axios';
+import { UrlHelper } from '../src/utils/enums';
 
 const TEST_SECRET_KEY = 'secret_RW182YA8LFH5T5IHIK15LTD6G9KM2CVMOU0H1YM6G21XZQ7HXEDPIBBBBIQ1Z4EQ6ME73F12NA3IGM9PDS0TJOU5E5AG8825W5U3';
 const TEST_TON_WALLET = 'UQBDIIYmDSgWO8UqhyYiU8qV0Lkmchhor3BwLVB6TX_3Vmsr';
@@ -154,6 +155,19 @@ describe('Testing API Endpoints', () => {
                 expect(err.response.data).toBeInstanceOf(Object);
                 expect(err.response.data).toEqual(error);
             });
+    });
+
+    it('Generic function [/getMe]', async () => {
+        testSuccessResponse(await client.genericRequest('GET', UrlHelper.getMe));
+    });
+
+    it('Generic function [/getWithdrawMinimum]', async () => {
+        const payload: GetWithdrawMinimumBody = {
+            asset: 'TON',
+            network: 'testnet',
+            blockchain: 'TON'
+        };
+        testSuccessResponse(await client.genericRequest('POST', UrlHelper.getWithdrawMinimum, payload));
     });
 
 });
