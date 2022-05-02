@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { TelepayClient } from '../src';
 import {
     CreateInvoiceBody,
@@ -7,11 +8,11 @@ import {
     WithdrawBody
 } from '../src/utils/interfaces';
 import { AxiosResponse } from 'axios';
-import { UrlHelper } from '../src/utils/enums';
+import { ApiMethod, UrlHelper } from '../src/utils/enums';
 
-const TEST_SECRET_KEY = 'secret_RW182YA8LFH5T5IHIK15LTD6G9KM2CVMOU0H1YM6G21XZQ7HXEDPIBBBBIQ1Z4EQ6ME73F12NA3IGM9PDS0TJOU5E5AG8825W5U3';
-const TEST_TON_WALLET = 'UQBDIIYmDSgWO8UqhyYiU8qV0Lkmchhor3BwLVB6TX_3Vmsr';
-const TEST_USERNAME = 'darkmatter';
+const TEST_SECRET_KEY = <string>process.env['TEST_SECRET_KEY'];
+const TEST_TON_WALLET = <string>process.env['TEST_TON_WALLET'];
+const TEST_USERNAME = <string>process.env['TEST_USERNAME'];
 
 describe('Testing TelepayClient class constructor', () => {
 
@@ -158,7 +159,7 @@ describe('Testing API Endpoints', () => {
     });
 
     it('Generic function [/getMe]', async () => {
-        testSuccessResponse(await client.genericRequest('GET', UrlHelper.getMe));
+        testSuccessResponse(await client.genericRequest(ApiMethod.GET, '/getMe'));
     });
 
     it('Generic function [/getWithdrawMinimum]', async () => {
@@ -167,7 +168,7 @@ describe('Testing API Endpoints', () => {
             network: 'testnet',
             blockchain: 'TON'
         };
-        testSuccessResponse(await client.genericRequest('POST', UrlHelper.getWithdrawMinimum, payload));
+        testSuccessResponse(await client.genericRequest(ApiMethod.POST, UrlHelper.getWithdrawMinimum, payload));
     });
 
 });
