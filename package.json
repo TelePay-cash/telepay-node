@@ -1,6 +1,6 @@
 {
   "name": "telepay-node",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "NodeJS SDK for the TelePay API",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
