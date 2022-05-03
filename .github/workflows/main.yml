@@ -6,6 +6,11 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+env:
+  TEST_SECRET_KEY: ${{ secrets.TEST_SECRET_KEY }}
+  TEST_TON_WALLET: ${{ secrets.TEST_TON_WALLET }}
+  TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
+
 jobs:
   build_and_tests:
     runs-on: ubuntu-latest
