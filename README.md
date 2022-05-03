@@ -1,13 +1,20 @@
-# telepay-node
+# NodeJS SDK for the TelePay API
+
+![TelePay Node](https://github.com/TelePay-cash/telepay-node/blob/main/docs/cover.jpg?raw=true)
+
+Official TelePay client library for NodeJS, so you can easely process cryptocurrency payments using the REST API.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![CI](https://github.com/TelePay-cash/telepay-node/actions/workflows/main.yml/badge.svg?branch=develop)](https://github.com/TelePay-cash/telepay-node/actions/workflows/main.yml)
-[![GitHub issues](https://img.shields.io/github/issues/TelePay-cash/telepay-node)](https://github.com/TelePay-cash/telepay-node/issues)
-[![GitHub forks](https://img.shields.io/github/forks/TelePay-cash/telepay-node)](https://github.com/TelePay-cash/telepay-node/network)
-[![GitHub stars](https://img.shields.io/github/stars/TelePay-cash/telepay-node)](https://github.com/TelePay-cash/telepay-node/stargazers)
-[![npm](https://img.shields.io/npm/v/telepay-node.svg)](https://www.npmjs.com/package/telepay-node)
-
-**Integration to TelePay API with Node.js.**
+[![CI](https://github.com/TelePay-cash/telepay-node/actions/workflows/main.yml/badge.svg)](https://github.com/TelePay-cash/telepay-node/actions/workflows/main.yml)
+[![npm](https://img.shields.io/npm/v/telepay-node.svg?style=flat-square)](https://www.npmjs.com/package/telepay-node)
+[![Last commit](https://img.shields.io/github/last-commit/telepay-cash/telepay-node.svg?style=flat-square)](https://github.com/telepay-cash/telepay-node/commits)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/telepay-cash/telepay-node?style=flat-square)](https://github.com/telepay-cash/telepay-node/commits)
+[![Github Stars](https://img.shields.io/github/stars/telepay-cash/telepay-node?style=flat-square&logo=github&)](https://github.com/telepay-cash/telepay-node/stargazers)
+[![Github Forks](https://img.shields.io/github/forks/telepay-cash/telepay-node?style=flat-square&logo=github)](https://github.com/telepay-cash/telepay-node/network/members)
+[![Github Watchers](https://img.shields.io/github/watchers/telepay-cash/telepay-node?style=flat-square&logo=github)](https://github.com/telepay-cash/telepay-node)
+[![GitHub contributors](https://img.shields.io/github/contributors/telepay-cash/telepay-node?label=code%20contributors&style=flat-square)](https://github.com/telepay-cash/telepay-node/graphs/contributors)
+[![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=flat-squeare&logo=telegram&logoColor=white)](https://t.me/TelePayCash)
+[![Blog](https://img.shields.io/badge/RSS-FFA500?style=flat-square&logo=rss&logoColor=white)](https://blog.telepay.cash)
 
 ## Installation
 
@@ -39,7 +46,7 @@ The API endpoints are documented in the [TelePay documentation](https://telepay.
 
 **/getMe**
 
-Info about the current merchant. [⤴️](https://telepay.readme.io/reference/getme)
+Info about the current merchant. [Read docs](https://telepay.readme.io/reference/getme)
 
 ```typescript
 const response = await telepayClient.getMe();
@@ -57,7 +64,7 @@ telepayClient.getMe()
 
 **/getBalance**
 
-Get your merchant wallet assets with corresponding balance. [⤴️](https://telepay.readme.io/reference/getbalance)
+Get your merchant wallet assets with corresponding balance. [Read docs](https://telepay.readme.io/reference/getbalance)
 
 ```typescript
 const response = await telepayClient.getBalance();
@@ -75,7 +82,7 @@ telepayClient.getBalance()
 
 **/getAssets**
 
-Get assets supported by TelePay. [⤴️](https://telepay.readme.io/reference/getassets)
+Get assets supported by TelePay. [Read docs](https://telepay.readme.io/reference/getassets)
 
 ```typescript
 const response = await telepayClient.getAssets();
@@ -93,7 +100,7 @@ telepayClient.getAssets()
 
 **/getInvoices**
 
-Get your merchant invoices. [⤴️](https://telepay.readme.io/reference/getinvoices)
+Get your merchant invoices. [Read docs](https://telepay.readme.io/reference/getinvoices)
 
 ```typescript
 const response = await telepayClient.getInvoices();
@@ -111,7 +118,7 @@ telepayClient.getInvoices()
 
 **/getInvoice**
 
-Get invoice details, by ID. [⤴️](https://telepay.readme.io/reference/getinvoice)
+Get invoice details, by ID. [Read docs](https://telepay.readme.io/reference/getinvoice)
 
 ```typescript
 const response = await telepayClient.getInvoice(invoiceNumber);
@@ -129,7 +136,7 @@ telepayClient.getInvoice(invoiceNumber)
 
 **/createInvoice**
 
-Creates an invoice, associated to your merchant. [⤴️](https://telepay.readme.io/reference/createinvoice)
+Creates an invoice, associated to your merchant. [Read docs](https://telepay.readme.io/reference/createinvoice)
 
 ```typescript
 const data: CreateInvoiceBody = {
@@ -154,7 +161,7 @@ telepayClient.createInvoice(data)
 
 **/cancelInvoice**
 
-Cancel invoice, by its number. [⤴️](https://telepay.readme.io/reference/cancelinvoice)
+Cancel invoice, by its number. [Read docs](https://telepay.readme.io/reference/cancelinvoice)
 
 ```typescript
 const invoiceNumber: string = 'TEST1234';
@@ -174,7 +181,7 @@ telepayClient.cancelInvoice(invoiceNumber)
 
 **/deleteInvoice**
 
-Delete invoice, by its number. [⤴️](https://telepay.readme.io/reference/deleteinvoice)
+Delete invoice, by its number. [Read docs](https://telepay.readme.io/reference/deleteinvoice)
 
 ```typescript
 const invoiceNumber: string = 'TEST1234';
@@ -194,7 +201,7 @@ telepayClient.deleteInvoice(invoiceNumber)
 
 **/transfer**
 
-Transfer funds between internal wallets. Off-chain operation. [⤴️](https://telepay.readme.io/reference/transfer)
+Transfer funds between internal wallets. Off-chain operation. [Read docs](https://telepay.readme.io/reference/transfer)
 
 ```typescript
 const data: TransferBody = {
@@ -221,7 +228,7 @@ telepayClient.transfer(data)
 **/getWithdrawMinimum**
 
 Obtains minimum amount required to withdraw funds on a given
-asset. [⤴️](https://telepay.readme.io/reference/getwithdrawminimum)
+asset. [Read docs](https://telepay.readme.io/reference/getwithdrawminimum)
 
 ```typescript
 const data: GetWithdrawMinimumBody = {
@@ -246,7 +253,7 @@ telepayClient.getWithdrawMinimum(data)
 **/getWithdrawFee**
 
 Get estimated withdraw fee, composed of blockchain fee and processing
-fee. [⤴️](https://telepay.readme.io/reference/getwithdrawfee)
+fee. [Read docs](https://telepay.readme.io/reference/getwithdrawfee)
 
 ```typescript
 const data: WithdrawBody = {
@@ -273,7 +280,7 @@ telepayClient.getWithdrawFee(data)
 **/withdraw**
 
 Withdraw funds from merchant wallet to external wallet. On-chain
-operation. [⤴️](https://telepay.readme.io/reference/withdraw)
+operation. [Read docs](https://telepay.readme.io/reference/withdraw)
 
 ```typescript
 const data: WithdrawBody = {
@@ -318,4 +325,23 @@ telepayClient.genericRequest(method, endpoint)
     });
 ```
 
-[![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=flat-squeare&logo=telegram&logoColor=white)](https://t.me/TelePayCash)
+## Contributors ✨
+
+The library is made by ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://zahirinatzuke.com"><img src="https://avatars.githubusercontent.com/u/41224027?v=4" width="100px;" alt=""/><br /><sub><b>Yohan González Almaguer</b></sub></a><br /><a href="https://github.com/telepay-cash/telepay-node/commits?author=ZahiriNatZuke" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/pedrocastellanos"><img src="https://avatars.githubusercontent.com/u/53188140?v=4" width="100px;" alt=""/><br /><sub><b>Pedro Castellanos</b></sub></a><br /><a href="https://github.com/telepay-cash/telepay-node/commits?author=pedrocastellanos" title="Code">💻</a></td>
+    <td align="center"><a href="https://lugodev.com"><img src="https://avatars.githubusercontent.com/u/18733370?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Carlos Lugones</b></sub></a><br /><a href="https://github.com/telepay-cash/telepay-node/commits?author=lugodev" title="Mentoring">🧑‍🏫</a></td>
+  </tr>
+</table>
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
