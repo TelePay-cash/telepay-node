@@ -1,7 +1,7 @@
 {
   "name": "telepay-node",
-  "version": "0.0.5",
-  "description": "Integration to TelePay API with Node.js",
+  "version": "0.0.1",
+  "description": "NodeJS SDK for the TelePay API",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -24,7 +24,8 @@
   "keywords": [
     "telepay",
     "cryptocurrencies",
-    "payments platform",
+    "payment processing",
+    "api",
     "PPaaS"
   ],
   "author": "Yohan González Almaguer <yohan.gonzalez.almaguer@gmail.com> (https://zahirinatzuke.com/)",
