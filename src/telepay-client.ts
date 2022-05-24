@@ -50,7 +50,9 @@ export class TelepayClient {
                 }
                 // @ts-ignore
             ].concat(axios.defaults.transformRequest),
-            transformResponse: data => JSON.parse(data)
+            transformResponse: data => {
+                if (typeof data === 'string') return JSON.parse(data); else return data;
+            }
         });
     }
 
