@@ -9,7 +9,7 @@ export { GetBalanceResponse } from './get-balance-response';
 export { Asset } from './asset';
 export { GetAssetsResponse } from './get-assets-response';
 export { Invoice } from './invoice';
-export { GetInvoicesResponse } from './get-invoices-response';
+export { GetInvoicesResponse, Invoices } from './get-invoices-response';
 export { CreateInvoiceResponse } from './create-invoice-response';
 export { Metadata } from './metadata';
 export { GetWithdrawFeeResponse } from './get-withdraw-fee-response';
