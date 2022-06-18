@@ -2,9 +2,11 @@ import 'dotenv/config';
 import { TelepayClient } from '../src';
 import {
     CreateInvoiceBody,
+    GetAllBalanceResponse,
     GetWithdrawMinimumBody,
     Invoice,
     TransferBody,
+    WalletBalance,
     WithdrawBody
 } from '../src/utils/interfaces';
 import { AxiosResponse } from 'axios';
@@ -32,6 +34,7 @@ describe('Testing TelepayClient class constructor', () => {
 describe('Testing API Endpoints', () => {
 
     let client: TelepayClient;
+    let walletBalances: WalletBalance[] = [];
 
     beforeAll(() => {
         client = new TelepayClient(TEST_SECRET_KEY);
@@ -41,8 +44,13 @@ describe('Testing API Endpoints', () => {
         testSuccessResponse(await client.getMe());
     });
 
-    it('Endpoint /getBalance', async () => {
-        testSuccessResponse(await client.getBalance());
+    it('Endpoint /getBalance [GET]', async () => {
+        walletBalances = (testSuccessResponse(await client.getAllBalances()) as GetAllBalanceResponse).wallets;
+    });
+
+    it('Endpoint /getBalance [POST]', async () => {
+        if (walletBalances.length > 0)
+            testSuccessResponse(await client.getOneBalance(walletBalances[0]));
     });
 
     it('Endpoint /getAssets', async () => {
@@ -83,7 +91,10 @@ describe('Testing API Endpoints', () => {
         it('Endpoint /deleteInvoice', async () => {
             const response = testSuccessResponse(await client.deleteInvoice(invoice.number));
 
-            expect(response).toEqual({ 'status': 'deleted' });
+            expect(response).toEqual({
+                error: 'invoice.deleted',
+                message: 'Invoice deleted.'
+            });
         });
 
     });
@@ -122,13 +133,13 @@ describe('Testing API Endpoints', () => {
             };
 
             const error = {
-                'error': 'insufficient-funds',
-                'message': 'Insufficient funds to withdraw'
+                'error': 'unavailable',
+                'message': 'This action is temporarly unavailable.',
             }
 
             await client.withdraw(payload)
                 .catch((err) => {
-                    expect(err.response.status).toBe(401);
+                    expect(err.response.status).toBe(503);
                     expect(err.response.data).toBeInstanceOf(Object);
                     expect(err.response.data).toEqual(error);
                 });
@@ -146,13 +157,13 @@ describe('Testing API Endpoints', () => {
         };
 
         const error = {
-            'error': 'insufficient-funds',
-            'message': 'Insufficient funds to transfer'
+            error: 'transfer.insufficient-funds',
+            message: 'Transfer failed. Insufficient funds.'
         }
 
         await client.transfer(payload)
             .catch((err) => {
-                expect(err.response.status).toBe(401);
+                expect(err.response.status).toBe(500);
                 expect(err.response.data).toBeInstanceOf(Object);
                 expect(err.response.data).toEqual(error);
             });

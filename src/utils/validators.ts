@@ -1,4 +1,4 @@
-import { CreateInvoiceBody, GetWithdrawMinimumBody, TransferBody, WithdrawBody } from './interfaces';
+import { CreateInvoiceBody, GetOneBalanceBody, GetWithdrawMinimumBody, TransferBody, WithdrawBody } from './interfaces';
 
 export const validateAuthorization = (authorization: string): boolean => {
     if (checkString(authorization)) throw new Error('[telepay-node] [authorization] must be a valid string.');
@@ -90,8 +90,22 @@ export const validateWithdraw = (data: WithdrawBody) => {
     return true;
 }
 
-export const checkString = (value: string): boolean => (typeof value !== 'string' || value.length === 0);
+export const validateGetOneBalance = (data: GetOneBalanceBody) => {
+    const {
+        asset,
+        blockchain,
+        network
+    } = data;
 
-export const checkNumber = (value: number): boolean => (typeof value !== 'number' || value < 0);
+    if (checkString(asset)) throw new Error('[telepay-node] [asset] must be a valid string.');
+    if (checkString(blockchain)) throw new Error('[telepay-node] [blockchain] must be a valid string.');
+    if (checkString(network)) throw new Error('[telepay-node] [network] must be a valid string.');
 
-export const checkObject = (value: object): boolean => (typeof value !== 'object');
+    return true;
+}
+
+export const checkString = (value: any): boolean => (typeof value !== 'string' || value.length === 0);
+
+export const checkNumber = (value: any): boolean => (typeof value !== 'number' || value < 0);
+
+export const checkObject = (value: any): boolean => (typeof value !== 'object');

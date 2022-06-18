@@ -62,16 +62,41 @@ telepayClient.getMe()
     });
 ```
 
-**/getBalance**
+**/getBalance [GET]**
 
 Get your merchant wallet assets with corresponding balance. [Read docs](https://telepay.readme.io/reference/getbalance)
 
 ```typescript
-const response = await telepayClient.getBalance();
+const response = await telepayClient.getAllBalances();
 
 // or
 
-telepayClient.getBalance()
+telepayClient.getAllBalances()
+    .then((res) => {
+        console.log(res);
+    })
+    .catch((err) => {
+        console.error(err);
+    });
+```
+
+**/getBalance [POST]**
+
+Get your merchant wallet assets with corresponding
+balance. [Read docs](https://telepay.readme.io/reference/getbalance-1)
+
+```typescript
+const data: GetOneBalanceBody = {
+    asset: 'TON',
+    blockchain: 'TON',
+    network: 'testnet'
+}
+
+const response = await telepayClient.getOneBalance(data);
+
+// or
+
+telepayClient.getOneBalance(data)
     .then((res) => {
         console.log(res);
     })
@@ -344,4 +369,5 @@ The library is made by ([emoji key](https://allcontributors.org/docs/en/emoji-ke
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification.
+Contributions of any kind welcome!
