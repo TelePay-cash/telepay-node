@@ -1,5 +1,5 @@
 import { WalletBalance } from './wallet-balance';
 
-export interface GetBalanceResponse {
+export interface GetAllBalanceResponse {
     wallets: WalletBalance[]
 }

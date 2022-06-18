@@ -3,21 +3,24 @@ import axios, { Axios, AxiosResponse } from 'axios';
 import {
     CreateInvoiceBody,
     CreateInvoiceResponse,
+    GetAllBalanceResponse,
     GetAssetsResponse,
-    GetBalanceResponse,
     GetInvoicesResponse,
     GetMeResponse,
+    GetOneBalanceBody,
     GetWithdrawFeeResponse,
     GetWithdrawMinimumBody,
     GetWithdrawMinimumResponse,
     Invoice,
     TransferBody,
+    WalletBalance,
     WithdrawBody
 } from './utils/interfaces';
 import {
     BASE_URL,
     validateAuthorization,
     validateCreateInvoice,
+    validateGetOneBalance,
     validateGetWithdrawMinimum,
     validateInvoiceNumber,
     validateTransfer,
@@ -67,10 +70,21 @@ export class TelepayClient {
     /**
      * @link Documentation: https://telepay.readme.io/reference/getbalance
      * @method GET
-     * @return Promise<AxiosResponse<GetBalanceResponse>>
+     * @return Promise<AxiosResponse<GetAllBalanceResponse>>
+     * Get your merchant wallet balance, specifying the asset.
+     */
+    public getAllBalances = (): Promise<AxiosResponse<GetAllBalanceResponse>> => this.axios.get(UrlHelper.getBalance);
+
+    /**
+     * @link Documentation: https://telepay.readme.io/reference/getbalance-1
+     * @method POST
+     * @return Promise<AxiosResponse<WalletBalance>>
      * Get your merchant wallet assets with corresponding balance.
      */
-    public getBalance = (): Promise<AxiosResponse<GetBalanceResponse>> => this.axios.get(UrlHelper.getBalance);
+    public getOneBalance = (data: GetOneBalanceBody): Promise<AxiosResponse<WalletBalance>> => {
+        validateGetOneBalance(data);
+        return this.axios.post(UrlHelper.getBalance, data);
+    }
 
     /**
      * @link Documentation: https://telepay.readme.io/reference/getassets
