@@ -138,7 +138,7 @@ export class TelepayClient {
      * @return Promise<AxiosResponse<Webhook>>
      * Get webhook details.
      */
-    public getWebhook = (webhook_id: string): Promise<AxiosResponse<Webhook>> =>
+    public getWebhook = (webhook_id: number): Promise<AxiosResponse<Webhook>> =>
         this.axios.get(`${ UrlHelper.getWebhook }/${ webhook_id }`);
 
     /**
@@ -230,7 +230,7 @@ export class TelepayClient {
      * @method POST
      * @param {WebhookBody} data Payload for new webhook.
      * @return Promise<AxiosResponse<Webhook>>
-     * Update a new webhook.
+     * Create a new webhook.
      */
     public createWebhook = (data: WebhookBody): Promise<AxiosResponse<Webhook>> => {
         validateWebhookBody(data);
@@ -245,7 +245,7 @@ export class TelepayClient {
      * @return Promise<AxiosResponse<Webhook>>
      * Update a webhook.
      */
-    public updateWebhook = (webhook_id: string, data: WebhookBody): Promise<AxiosResponse<Webhook>> => {
+    public updateWebhook = (webhook_id: number, data: WebhookBody): Promise<AxiosResponse<Webhook>> => {
         validateWebhookBody(data);
         return this.axios.post(`${ UrlHelper.updateWebhook }/${ webhook_id }`, data);
     }
@@ -258,7 +258,7 @@ export class TelepayClient {
      * @return Promise<AxiosResponse<Webhook>>
      * Activates a webhook.
      */
-    public activateWebhook = (webhook_id: string, data: StatusWebhookBody): Promise<AxiosResponse<Webhook>> => {
+    public activateWebhook = (webhook_id: number, data: StatusWebhookBody): Promise<AxiosResponse<Webhook>> => {
         validateStatusWebhookBody(data);
         return this.axios.post(`${ UrlHelper.activateWebhook }/${ webhook_id }`, data);
     }
@@ -269,9 +269,9 @@ export class TelepayClient {
      * @param {string} webhook_id Webhook ID.
      * @param {StatusWebhookBody} data Payload for deactivate webhook.
      * @return Promise<AxiosResponse<Webhook>>
-     * Activates a webhook.
+     * Deactivates a webhook.
      */
-    public deactivateWebhook = (webhook_id: string, data: StatusWebhookBody): Promise<AxiosResponse<Webhook>> => {
+    public deactivateWebhook = (webhook_id: number, data: StatusWebhookBody): Promise<AxiosResponse<Webhook>> => {
         validateStatusWebhookBody(data);
         return this.axios.post(`${ UrlHelper.deactivateWebhook }/${ webhook_id }`, data);
     }
