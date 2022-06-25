@@ -106,7 +106,7 @@ describe('Testing API Endpoints', () => {
             const response = testSuccessResponse(await client.deleteInvoice(invoice.number));
 
             expect(response).toEqual({
-                error: 'invoice.deleted',
+                success: 'invoice.deleted',
                 message: 'Invoice deleted.'
             });
         });
@@ -210,7 +210,7 @@ describe('Testing API Endpoints', () => {
         });
 
         it('Endpoint /getWebhook', async () => {
-            const response = testSuccessResponse(await client.getWebhook(`${ webhook.id }`));
+            const response = testSuccessResponse(await client.getWebhook(webhook.id));
             expect(response).toMatchObject(webhook);
         });
 
@@ -220,7 +220,7 @@ describe('Testing API Endpoints', () => {
                 events: [WebhookEvents.Expired, WebhookEvents.Deleted]
             }
 
-            webhook = testSuccessResponse(await client.updateWebhook(`${ webhook.id }`, payload));
+            webhook = testSuccessResponse(await client.updateWebhook(webhook.id, payload));
             expect(webhook.events).toEqual(payload.events);
         });
 
@@ -231,7 +231,7 @@ describe('Testing API Endpoints', () => {
                 blockchain: 'TON'
             };
 
-            webhook = testSuccessResponse(await client.activateWebhook(`${ webhook.id }`, payload));
+            webhook = testSuccessResponse(await client.activateWebhook(webhook.id, payload));
             expect(webhook.active).toBeTruthy();
         });
 
@@ -242,7 +242,7 @@ describe('Testing API Endpoints', () => {
                 blockchain: 'TON'
             };
 
-            webhook = testSuccessResponse(await client.deactivateWebhook(`${ webhook.id }`, payload));
+            webhook = testSuccessResponse(await client.deactivateWebhook(webhook.id, payload));
             expect(webhook.active).toBeFalsy();
         });
 
