@@ -17,3 +17,8 @@ export { BadRequestError } from './bad-request-error';
 export { GetWithdrawMinimumBody } from './get-withdraw-minimum-body';
 export { GetWithdrawMinimumResponse } from './get-withdraw-minimum-response';
 export { GetOneBalanceBody } from './get-one-balance-body';
+export { GetOneAssetResponse } from './get-one-asset-response';
+export { GetOneAssetBody } from './get-one-asset-body';
+export { Webhook } from './webhook';
+export { WebhookBody } from './webhook-body';
+export { StatusWebhookBody } from './status-webhook-body';

@@ -3,14 +3,18 @@ import { TelepayClient } from '../src';
 import {
     CreateInvoiceBody,
     GetAllBalanceResponse,
+    GetOneAssetBody,
     GetWithdrawMinimumBody,
     Invoice,
+    StatusWebhookBody,
     TransferBody,
     WalletBalance,
+    Webhook,
+    WebhookBody,
     WithdrawBody
 } from '../src/utils/interfaces';
 import { AxiosResponse } from 'axios';
-import { ApiMethod, UrlHelper } from '../src/utils/enums';
+import { ApiMethod, UrlHelper, WebhookEvents } from '../src/utils/enums';
 
 const TEST_SECRET_KEY = <string>process.env['TEST_SECRET_KEY'];
 const TEST_TON_WALLET = <string>process.env['TEST_TON_WALLET'];
@@ -25,7 +29,7 @@ describe('Testing TelepayClient class constructor', () => {
 
     it('Failure class constructor', () => {
         expect(() => {
-            const client = new TelepayClient('');
+            new TelepayClient('');
         }).toThrow('[telepay-node] [authorization] must be a valid string.');
     });
 
@@ -35,6 +39,7 @@ describe('Testing API Endpoints', () => {
 
     let client: TelepayClient;
     let walletBalances: WalletBalance[] = [];
+    let webhook: Webhook;
 
     beforeAll(() => {
         client = new TelepayClient(TEST_SECRET_KEY);
@@ -51,6 +56,15 @@ describe('Testing API Endpoints', () => {
     it('Endpoint /getBalance [POST]', async () => {
         if (walletBalances.length > 0)
             testSuccessResponse(await client.getOneBalance(walletBalances[0]));
+    });
+
+    it('Endpoint /getAsset', async () => {
+        const payload: GetOneAssetBody = {
+            asset: 'TON',
+            network: 'testnet',
+            blockchain: 'TON'
+        };
+        testSuccessResponse(await client.getAsset(payload));
     });
 
     it('Endpoint /getAssets', async () => {
@@ -163,7 +177,7 @@ describe('Testing API Endpoints', () => {
 
         await client.transfer(payload)
             .catch((err) => {
-                expect(err.response.status).toBe(500);
+                expect(err.response.status).toBe(401);
                 expect(err.response.data).toBeInstanceOf(Object);
                 expect(err.response.data).toEqual(error);
             });
@@ -180,6 +194,58 @@ describe('Testing API Endpoints', () => {
             blockchain: 'TON'
         };
         testSuccessResponse(await client.genericRequest(ApiMethod.POST, UrlHelper.getWithdrawMinimum, payload));
+    });
+
+    describe('Testing WebHook Endpoints', () => {
+
+        it('Endpoint /createWebhook', async () => {
+            const payload: WebhookBody = {
+                url: `https://api.example.com/webhook/${ require('crypto').randomBytes(8).toString('base64') }`,
+                active: true,
+                events: [WebhookEvents.Completed, WebhookEvents.Cancelled],
+                secret: require('crypto').randomBytes(64).toString('base64')
+            };
+
+            webhook = testSuccessResponse(await client.createWebhook(payload));
+        });
+
+        it('Endpoint /getWebhook', async () => {
+            const response = testSuccessResponse(await client.getWebhook(`${ webhook.id }`));
+            expect(response).toMatchObject(webhook);
+        });
+
+        it('Endpoint /updateWebhook', async () => {
+            const payload: WebhookBody = {
+                ...webhook,
+                events: [WebhookEvents.Expired, WebhookEvents.Deleted]
+            }
+
+            webhook = testSuccessResponse(await client.updateWebhook(`${ webhook.id }`, payload));
+            expect(webhook.events).toEqual(payload.events);
+        });
+
+        it('Endpoint /activateWebhook', async () => {
+            const payload: StatusWebhookBody = {
+                asset: 'TON',
+                network: 'testnet',
+                blockchain: 'TON'
+            };
+
+            webhook = testSuccessResponse(await client.activateWebhook(`${ webhook.id }`, payload));
+            expect(webhook.active).toBeTruthy();
+        });
+
+        it('Endpoint /deactivateWebhook', async () => {
+            const payload: StatusWebhookBody = {
+                asset: 'TON',
+                network: 'testnet',
+                blockchain: 'TON'
+            };
+
+            webhook = testSuccessResponse(await client.deactivateWebhook(`${ webhook.id }`, payload));
+            expect(webhook.active).toBeFalsy();
+        });
+
     });
 
 });

@@ -1,4 +1,13 @@
-import { CreateInvoiceBody, GetOneBalanceBody, GetWithdrawMinimumBody, TransferBody, WithdrawBody } from './interfaces';
+import {
+    CreateInvoiceBody,
+    GetOneBalanceBody,
+    GetWithdrawMinimumBody,
+    StatusWebhookBody,
+    TransferBody,
+    WebhookBody,
+    WithdrawBody
+} from './interfaces';
+import { WebhookEvents } from './enums';
 
 export const validateAuthorization = (authorization: string): boolean => {
     if (checkString(authorization)) throw new Error('[telepay-node] [authorization] must be a valid string.');
@@ -104,8 +113,45 @@ export const validateGetOneBalance = (data: GetOneBalanceBody) => {
     return true;
 }
 
+export const validateWebhookBody = (data: WebhookBody) => {
+    const {
+        url,
+        secret,
+        events,
+        active
+    } = data;
+
+    if (checkString(url)) throw new Error('[telepay-node] [url] must be a valid string.');
+    if (checkString(secret)) throw new Error('[telepay-node] [secret] must be a valid string.');
+    if (!checkWebhookEvents(events)) throw new Error('[telepay-node] [events] must be a valid webhooks events array.');
+    if (active !== undefined && checkBoolean(active)) throw new Error('[telepay-node] [active] must be a valid boolean.');
+
+    return true;
+}
+
+export const validateStatusWebhookBody = (data: StatusWebhookBody) => {
+    const {
+        asset,
+        blockchain,
+        network
+    } = data;
+
+    if (checkString(asset)) throw new Error('[telepay-node] [asset] must be a valid string.');
+    if (checkString(blockchain)) throw new Error('[telepay-node] [blockchain] must be a valid string.');
+    if (checkString(network)) throw new Error('[telepay-node] [network] must be a valid string.');
+
+    return true;
+}
+
 export const checkString = (value: any): boolean => (typeof value !== 'string' || value.length === 0);
 
 export const checkNumber = (value: any): boolean => (typeof value !== 'number' || value < 0);
 
 export const checkObject = (value: any): boolean => (typeof value !== 'object');
+
+export const checkBoolean = (value: any): boolean => (typeof value !== 'boolean');
+
+export const checkArray = (value: any): boolean => (value instanceof Array);
+
+export const checkWebhookEvents = (value: any[]): boolean =>
+    checkArray(value) && value.every(elm => Object.values(WebhookEvents).includes(elm))
