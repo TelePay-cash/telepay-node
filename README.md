@@ -398,6 +398,24 @@ telepayClient.getWebhook(webhook_id)
     });
 ```
 
+**/getWebhook**
+
+Get webhooks. [Read docs](https://telepay.readme.io/reference/getwebhooks)
+
+```typescript
+const response = await telepayClient.getWebhooks();
+
+// or
+
+telepayClient.getWebhooks()
+    .then((res) => {
+        console.log(res);
+    })
+    .catch((err) => {
+        console.error(err);
+    });
+```
+
 **/updateWebhook**
 
 Update a webhook. [Read docs](https://telepay.readme.io/reference/updatewebhook)
@@ -466,6 +484,26 @@ const response = await telepayClient.deactivateWebhook(webhook_id, data);
 // or
 
 telepayClient.deactivateWebhook(webhook_id, data)
+    .then((res) => {
+        console.log(res);
+    })
+    .catch((err) => {
+        console.error(err);
+    });
+```
+
+**/deleteWebhook**
+
+Deletes a webhook. [Read docs](https://telepay.readme.io/reference/deletewebhook)
+
+```typescript
+const webhook_id = 123;
+
+const response = await telepayClient.deleteWebhook(webhook_id);
+
+// or
+
+telepayClient.deleteWebhook(webhook_id, data)
     .then((res) => {
         console.log(res);
     })
