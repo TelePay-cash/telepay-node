@@ -22,3 +22,4 @@ export { GetOneAssetBody } from './get-one-asset-body';
 export { Webhook } from './webhook';
 export { WebhookBody } from './webhook-body';
 export { StatusWebhookBody } from './status-webhook-body';
+export { GetWebhooksResponse } from './get-webhooks-response';
