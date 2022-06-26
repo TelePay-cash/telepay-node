@@ -4,6 +4,7 @@ import {
     CreateInvoiceBody,
     GetAllBalanceResponse,
     GetOneAssetBody,
+    GetWebhooksResponse,
     GetWithdrawMinimumBody,
     Invoice,
     StatusWebhookBody,
@@ -202,7 +203,7 @@ describe('Testing API Endpoints', () => {
             const payload: WebhookBody = {
                 url: `https://api.example.com/webhook/${ require('crypto').randomBytes(8).toString('base64') }`,
                 active: true,
-                events: [WebhookEvents.Completed, WebhookEvents.Cancelled],
+                events: [WebhookEvents.InvoiceCompleted, WebhookEvents.InvoiceCancelled],
                 secret: require('crypto').randomBytes(64).toString('base64')
             };
 
@@ -214,10 +215,15 @@ describe('Testing API Endpoints', () => {
             expect(response).toMatchObject(webhook);
         });
 
+        it('Endpoint /getWebhooks', async () => {
+            const response: GetWebhooksResponse = testSuccessResponse(await client.getWebhooks());
+            expect(response.webhooks.map(w => w.id)).toContain(webhook.id);
+        });
+
         it('Endpoint /updateWebhook', async () => {
             const payload: WebhookBody = {
                 ...webhook,
-                events: [WebhookEvents.Expired, WebhookEvents.Deleted]
+                events: [WebhookEvents.InvoiceExpired, WebhookEvents.InvoiceDeleted]
             }
 
             webhook = testSuccessResponse(await client.updateWebhook(webhook.id, payload));
@@ -244,6 +250,12 @@ describe('Testing API Endpoints', () => {
 
             webhook = testSuccessResponse(await client.deactivateWebhook(webhook.id, payload));
             expect(webhook.active).toBeFalsy();
+        });
+
+        it('Endpoint /deleteWebhook', async () => {
+
+            const response = testSuccessResponse(await client.deleteWebhook(webhook.id));
+            expect(response).toMatchObject({ success: 'webhook.deleted', message: 'Webhook deleted.' });
         });
 
     });
