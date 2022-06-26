@@ -62,16 +62,65 @@ telepayClient.getMe()
     });
 ```
 
-**/getBalance**
+**/getBalance [GET]**
 
 Get your merchant wallet assets with corresponding balance. [Read docs](https://telepay.readme.io/reference/getbalance)
 
 ```typescript
-const response = await telepayClient.getBalance();
+const response = await telepayClient.getAllBalances();
 
 // or
 
-telepayClient.getBalance()
+telepayClient.getAllBalances()
+    .then((res) => {
+        console.log(res);
+    })
+    .catch((err) => {
+        console.error(err);
+    });
+```
+
+**/getBalance [POST]**
+
+Get your merchant wallet assets with corresponding
+balance. [Read docs](https://telepay.readme.io/reference/getbalance-1)
+
+```typescript
+const data: GetOneBalanceBody = {
+    asset: 'TON',
+    blockchain: 'TON',
+    network: 'testnet'
+}
+
+const response = await telepayClient.getOneBalance(data);
+
+// or
+
+telepayClient.getOneBalance(data)
+    .then((res) => {
+        console.log(res);
+    })
+    .catch((err) => {
+        console.error(err);
+    });
+```
+
+**/getAsset**
+
+Get asset details. [Read docs](https://telepay.readme.io/reference/getasset)
+
+```typescript
+ const data: GetOneAssetBody = {
+    asset: 'TON',
+    network: 'testnet',
+    blockchain: 'TON'
+};
+
+const response = await telepayClient.getAsset(data);
+
+// or
+
+telepayClient.getAsset(data)
     .then((res) => {
         console.log(res);
     })
@@ -304,6 +353,127 @@ telepayClient.withdraw(data)
     });
 ```
 
+**/createWebhook**
+
+Create a new webhook. [Read docs](https://telepay.readme.io/reference/createwebhook)
+
+```typescript
+const data: WebhookBody = {
+    url: 'https://api.example.com/webhook',
+    active: true,
+    events: [WebhookEvents.Completed, WebhookEvents.Cancelled],
+    secret: '<SECRET>'
+};
+
+const response = await telepayClient.createWebhook(data);
+
+// or
+
+telepayClient.createWebhook(data)
+    .then((res) => {
+        console.log(res);
+    })
+    .catch((err) => {
+        console.error(err);
+    });
+```
+
+**/getWebhook**
+
+Get webhook details. [Read docs](https://telepay.readme.io/reference/getwebhook)
+
+```typescript
+const webhook_id = 123;
+
+const response = await telepayClient.getWebhook(webhook_id);
+
+// or
+
+telepayClient.getWebhook(webhook_id)
+    .then((res) => {
+        console.log(res);
+    })
+    .catch((err) => {
+        console.error(err);
+    });
+```
+
+**/updateWebhook**
+
+Update a webhook. [Read docs](https://telepay.readme.io/reference/updatewebhook)
+
+```typescript
+const webhook_id = 123;
+const data: WebhookBody = {
+    url: 'https://api.example.com/webhook',
+    active: true,
+    events: [WebhookEvents.Expired, WebhookEvents.Deleted],
+    secret: '<SECRET>'
+};
+
+const response = await telepayClient.updateWebhook(webhook_id, data);
+
+// or
+
+telepayClient.updateWebhook(webhook_id, data)
+    .then((res) => {
+        console.log(res);
+    })
+    .catch((err) => {
+        console.error(err);
+    });
+```
+
+**/activateWebhook**
+
+Activates a webhook. [Read docs](https://telepay.readme.io/reference/activatewebhook)
+
+```typescript
+const webhook_id = 123;
+const data: StatusWebhookBody = {
+    asset: 'TON',
+    network: 'testnet',
+    blockchain: 'TON'
+};
+
+const response = await telepayClient.activateWebhook(webhook_id, data);
+
+// or
+
+telepayClient.activateWebhook(webhook_id, data)
+    .then((res) => {
+        console.log(res);
+    })
+    .catch((err) => {
+        console.error(err);
+    });
+```
+
+**/deactivateWebhook**
+
+Deactivates a webhook. [Read docs](https://telepay.readme.io/reference/deactivatewebhook)
+
+```typescript
+const webhook_id = 123;
+const data: StatusWebhookBody = {
+    asset: 'TON',
+    network: 'testnet',
+    blockchain: 'TON'
+};
+
+const response = await telepayClient.deactivateWebhook(webhook_id, data);
+
+// or
+
+telepayClient.deactivateWebhook(webhook_id, data)
+    .then((res) => {
+        console.log(res);
+    })
+    .catch((err) => {
+        console.error(err);
+    });
+```
+
 **Extra feature**
 
 Generic function for perform requests to any endpoint
@@ -344,4 +514,5 @@ The library is made by ([emoji key](https://allcontributors.org/docs/en/emoji-ke
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification.
+Contributions of any kind welcome!
