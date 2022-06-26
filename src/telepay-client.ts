@@ -10,6 +10,7 @@ import {
     GetOneAssetBody,
     GetOneAssetResponse,
     GetOneBalanceBody,
+    GetWebhooksResponse,
     GetWithdrawFeeResponse,
     GetWithdrawMinimumBody,
     GetWithdrawMinimumResponse,
@@ -134,12 +135,21 @@ export class TelepayClient {
     /**
      * @link Documentation: https://telepay.readme.io/reference/getwebhook
      * @method GET
-     * @param {string} webhook_id Webhook ID.
+     * @param {number} webhook_id Webhook ID.
      * @return Promise<AxiosResponse<Webhook>>
      * Get webhook details.
      */
     public getWebhook = (webhook_id: number): Promise<AxiosResponse<Webhook>> =>
         this.axios.get(`${ UrlHelper.getWebhook }/${ webhook_id }`);
+
+    /**
+     * @link Documentation: https://telepay.readme.io/reference/getwebhooks
+     * @method GET
+     * @return Promise<AxiosResponse<GetWebhooksResponse>>
+     * Get webhooks.
+     */
+    public getWebhooks = (): Promise<AxiosResponse<GetWebhooksResponse>> =>
+        this.axios.get(UrlHelper.getWebhooks);
 
     /**
      * @link Documentation: https://telepay.readme.io/reference/createinvoice
@@ -240,7 +250,7 @@ export class TelepayClient {
     /**
      * @link Documentation: https://telepay.readme.io/reference/updatewebhook
      * @method POST
-     * @param {string} webhook_id Webhook ID.
+     * @param {number} webhook_id Webhook ID.
      * @param {WebhookBody} data Payload for update webhook.
      * @return Promise<AxiosResponse<Webhook>>
      * Update a webhook.
@@ -253,7 +263,7 @@ export class TelepayClient {
     /**
      * @link Documentation: https://telepay.readme.io/reference/activatewebhook
      * @method POST
-     * @param {string} webhook_id Webhook ID.
+     * @param {number} webhook_id Webhook ID.
      * @param {StatusWebhookBody} data Payload for activate webhook.
      * @return Promise<AxiosResponse<Webhook>>
      * Activates a webhook.
@@ -266,7 +276,7 @@ export class TelepayClient {
     /**
      * @link Documentation: https://telepay.readme.io/reference/deactivatewebhook
      * @method POST
-     * @param {string} webhook_id Webhook ID.
+     * @param {number} webhook_id Webhook ID.
      * @param {StatusWebhookBody} data Payload for deactivate webhook.
      * @return Promise<AxiosResponse<Webhook>>
      * Deactivates a webhook.
@@ -274,6 +284,17 @@ export class TelepayClient {
     public deactivateWebhook = (webhook_id: number, data: StatusWebhookBody): Promise<AxiosResponse<Webhook>> => {
         validateStatusWebhookBody(data);
         return this.axios.post(`${ UrlHelper.deactivateWebhook }/${ webhook_id }`, data);
+    }
+
+    /**
+     * @link Documentation: https://telepay.readme.io/reference/deletewebhook
+     * @method POST
+     * @param {number} webhook_id Webhook ID.
+     * @return Promise<AxiosResponse<{ success: string, message: string }>>
+     * Deletes a webhook.
+     */
+    public deleteWebhook = (webhook_id: number): Promise<AxiosResponse<{ success: string, message: string }>> => {
+        return this.axios.post(`${ UrlHelper.deleteWebhook }/${ webhook_id }`, {});
     }
 
     /**
