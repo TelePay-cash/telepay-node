@@ -6,6 +6,7 @@ export enum UrlHelper {
     getInvoice = '/getInvoice',
     getInvoices = '/getInvoices',
     getWebhook = '/getWebhook',
+    getWebhooks = '/getWebhooks',
     createInvoice = '/createInvoice',
     cancelInvoice = '/cancelInvoice',
     deleteInvoice = '/deleteInvoice',
@@ -16,7 +17,8 @@ export enum UrlHelper {
     createWebhook = '/createWebhook',
     updateWebhook = '/updateWebhook',
     activateWebhook = '/activateWebhook',
-    deactivateWebhook = '/deactivateWebhook'
+    deactivateWebhook = '/deactivateWebhook',
+    deleteWebhook = '/deleteWebhook'
 }
 
 export type ApiEndpoint = UrlHelper | string;
