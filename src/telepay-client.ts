@@ -3,24 +3,35 @@ import axios, { Axios, AxiosResponse } from 'axios';
 import {
     CreateInvoiceBody,
     CreateInvoiceResponse,
+    GetAllBalanceResponse,
     GetAssetsResponse,
-    GetBalanceResponse,
     GetInvoicesResponse,
     GetMeResponse,
+    GetOneAssetBody,
+    GetOneAssetResponse,
+    GetOneBalanceBody,
+    GetWebhooksResponse,
     GetWithdrawFeeResponse,
     GetWithdrawMinimumBody,
     GetWithdrawMinimumResponse,
     Invoice,
+    StatusWebhookBody,
     TransferBody,
+    WalletBalance,
+    Webhook,
+    WebhookBody,
     WithdrawBody
 } from './utils/interfaces';
 import {
     BASE_URL,
     validateAuthorization,
     validateCreateInvoice,
+    validateGetOneBalance,
     validateGetWithdrawMinimum,
     validateInvoiceNumber,
+    validateStatusWebhookBody,
     validateTransfer,
+    validateWebhookBody,
     validateWithdraw
 } from './utils';
 
@@ -67,10 +78,31 @@ export class TelepayClient {
     /**
      * @link Documentation: https://telepay.readme.io/reference/getbalance
      * @method GET
-     * @return Promise<AxiosResponse<GetBalanceResponse>>
+     * @return Promise<AxiosResponse<GetAllBalanceResponse>>
+     * Get your merchant wallet balance, specifying the asset.
+     */
+    public getAllBalances = (): Promise<AxiosResponse<GetAllBalanceResponse>> => this.axios.get(UrlHelper.getBalance);
+
+    /**
+     * @link Documentation: https://telepay.readme.io/reference/getbalance-1
+     * @method POST
+     * @return Promise<AxiosResponse<WalletBalance>>
      * Get your merchant wallet assets with corresponding balance.
      */
-    public getBalance = (): Promise<AxiosResponse<GetBalanceResponse>> => this.axios.get(UrlHelper.getBalance);
+    public getOneBalance = (data: GetOneBalanceBody): Promise<AxiosResponse<WalletBalance>> => {
+        validateGetOneBalance(data);
+        return this.axios.post(UrlHelper.getBalance, data);
+    }
+
+    /**
+     * @link Documentation: https://telepay.readme.io/reference/getasset
+     * @method GET
+     * @param {GetOneAssetBody} data Payload of asset.
+     * @return Promise<AxiosResponse<GetOneAssetResponse>>
+     * Get asset details.
+     */
+    public getAsset = (data: GetOneAssetBody): Promise<AxiosResponse<GetOneAssetResponse>> =>
+        this.axios.get(UrlHelper.getAsset, { data });
 
     /**
      * @link Documentation: https://telepay.readme.io/reference/getassets
@@ -83,14 +115,6 @@ export class TelepayClient {
     /**
      * @link Documentation: https://telepay.readme.io/reference/getinvoice
      * @method GET
-     * @return Promise<AxiosResponse<GetInvoicesResponse>>
-     * Get invoice details, by ID.
-     */
-    public getInvoices = (): Promise<AxiosResponse<GetInvoicesResponse>> => this.axios.get(UrlHelper.getInvoices);
-
-    /**
-     * @link Documentation: https://telepay.readme.io/reference/getinvoice
-     * @method GET
      * @param {string} invoiceNumber ID of invoice.
      * @return Promise<AxiosResponse<Invoice>>
      * Get invoice details, by ID.
@@ -99,6 +123,33 @@ export class TelepayClient {
         validateInvoiceNumber(invoiceNumber);
         return this.axios.get(`${ UrlHelper.getInvoice }/${ invoiceNumber }`);
     }
+
+    /**
+     * @link Documentation: https://telepay.readme.io/reference/getinvoice
+     * @method GET
+     * @return Promise<AxiosResponse<GetInvoicesResponse>>
+     * Get invoice details, by ID.
+     */
+    public getInvoices = (): Promise<AxiosResponse<GetInvoicesResponse>> => this.axios.get(UrlHelper.getInvoices);
+
+    /**
+     * @link Documentation: https://telepay.readme.io/reference/getwebhook
+     * @method GET
+     * @param {number} webhook_id Webhook ID.
+     * @return Promise<AxiosResponse<Webhook>>
+     * Get webhook details.
+     */
+    public getWebhook = (webhook_id: number): Promise<AxiosResponse<Webhook>> =>
+        this.axios.get(`${ UrlHelper.getWebhook }/${ webhook_id }`);
+
+    /**
+     * @link Documentation: https://telepay.readme.io/reference/getwebhooks
+     * @method GET
+     * @return Promise<AxiosResponse<GetWebhooksResponse>>
+     * Get webhooks.
+     */
+    public getWebhooks = (): Promise<AxiosResponse<GetWebhooksResponse>> =>
+        this.axios.get(UrlHelper.getWebhooks);
 
     /**
      * @link Documentation: https://telepay.readme.io/reference/createinvoice
@@ -182,6 +233,68 @@ export class TelepayClient {
     public withdraw = (data: WithdrawBody): Promise<AxiosResponse<{ success: boolean }>> => {
         validateWithdraw(data);
         return this.axios.post(UrlHelper.withdraw, data);
+    }
+
+    /**
+     * @link Documentation: https://telepay.readme.io/reference/createwebhook
+     * @method POST
+     * @param {WebhookBody} data Payload for new webhook.
+     * @return Promise<AxiosResponse<Webhook>>
+     * Create a new webhook.
+     */
+    public createWebhook = (data: WebhookBody): Promise<AxiosResponse<Webhook>> => {
+        validateWebhookBody(data);
+        return this.axios.post(UrlHelper.createWebhook, data);
+    }
+
+    /**
+     * @link Documentation: https://telepay.readme.io/reference/updatewebhook
+     * @method POST
+     * @param {number} webhook_id Webhook ID.
+     * @param {WebhookBody} data Payload for update webhook.
+     * @return Promise<AxiosResponse<Webhook>>
+     * Update a webhook.
+     */
+    public updateWebhook = (webhook_id: number, data: WebhookBody): Promise<AxiosResponse<Webhook>> => {
+        validateWebhookBody(data);
+        return this.axios.post(`${ UrlHelper.updateWebhook }/${ webhook_id }`, data);
+    }
+
+    /**
+     * @link Documentation: https://telepay.readme.io/reference/activatewebhook
+     * @method POST
+     * @param {number} webhook_id Webhook ID.
+     * @param {StatusWebhookBody} data Payload for activate webhook.
+     * @return Promise<AxiosResponse<Webhook>>
+     * Activates a webhook.
+     */
+    public activateWebhook = (webhook_id: number, data: StatusWebhookBody): Promise<AxiosResponse<Webhook>> => {
+        validateStatusWebhookBody(data);
+        return this.axios.post(`${ UrlHelper.activateWebhook }/${ webhook_id }`, data);
+    }
+
+    /**
+     * @link Documentation: https://telepay.readme.io/reference/deactivatewebhook
+     * @method POST
+     * @param {number} webhook_id Webhook ID.
+     * @param {StatusWebhookBody} data Payload for deactivate webhook.
+     * @return Promise<AxiosResponse<Webhook>>
+     * Deactivates a webhook.
+     */
+    public deactivateWebhook = (webhook_id: number, data: StatusWebhookBody): Promise<AxiosResponse<Webhook>> => {
+        validateStatusWebhookBody(data);
+        return this.axios.post(`${ UrlHelper.deactivateWebhook }/${ webhook_id }`, data);
+    }
+
+    /**
+     * @link Documentation: https://telepay.readme.io/reference/deletewebhook
+     * @method POST
+     * @param {number} webhook_id Webhook ID.
+     * @return Promise<AxiosResponse<{ success: string, message: string }>>
+     * Deletes a webhook.
+     */
+    public deleteWebhook = (webhook_id: number): Promise<AxiosResponse<{ success: string, message: string }>> => {
+        return this.axios.post(`${ UrlHelper.deleteWebhook }/${ webhook_id }`, {});
     }
 
     /**
