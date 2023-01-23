@@ -15,11 +15,11 @@ import {
     WithdrawBody
 } from '../src/utils/interfaces';
 import { AxiosResponse } from 'axios';
-import { ApiMethod, UrlHelper, WebhookEvents } from '../src/utils/enums';
+import { ApiMethod, Network, UrlHelper, WebhookEvents } from '../src/utils/enums';
 
-const TEST_SECRET_KEY = <string>process.env['TEST_SECRET_KEY'];
-const TEST_TON_WALLET = <string>process.env['TEST_TON_WALLET'];
-const TEST_USERNAME = <string>process.env['TEST_USERNAME'];
+const TEST_SECRET_KEY = <string> process.env['TEST_SECRET_KEY'];
+const TEST_TON_WALLET = <string> process.env['TEST_TON_WALLET'];
+const TEST_USERNAME = <string> process.env['TEST_USERNAME'];
 
 describe('Testing TelepayClient class constructor', () => {
 
@@ -47,29 +47,37 @@ describe('Testing API Endpoints', () => {
     });
 
     it('Endpoint /getMe', async () => {
-        testSuccessResponse(await client.getMe());
+        await client.getMe()
+            .then((res) => testSuccessResponse(res));
     });
 
     it('Endpoint /getBalance [GET]', async () => {
-        walletBalances = (testSuccessResponse(await client.getAllBalances()) as GetAllBalanceResponse).wallets;
+        await client.getAllBalances()
+            .then((res) => {
+                walletBalances = (testSuccessResponse(res) as GetAllBalanceResponse).wallets;
+            });
     });
 
     it('Endpoint /getBalance [POST]', async () => {
         if (walletBalances.length > 0)
-            testSuccessResponse(await client.getOneBalance(walletBalances[0]));
+            await client.getOneBalance(walletBalances[0])
+                .then((res) => testSuccessResponse(res));
     });
 
     it('Endpoint /getAsset', async () => {
         const payload: GetOneAssetBody = {
             asset: 'TON',
-            network: 'testnet',
+            network: Network.testnet,
             blockchain: 'TON'
         };
-        testSuccessResponse(await client.getAsset(payload));
+
+        await client.getAsset(payload)
+            .then((res) => testSuccessResponse(res));
     });
 
     it('Endpoint /getAssets', async () => {
-        testSuccessResponse(await client.getAssets());
+        await client.getAssets()
+            .then((res) => testSuccessResponse(res));
     });
 
     describe('Testing Invoice Endpoints', () => {
@@ -79,39 +87,48 @@ describe('Testing API Endpoints', () => {
             const payload: CreateInvoiceBody = {
                 asset: 'TON',
                 amount: 100,
-                network: 'testnet',
+                network: Network.testnet,
                 blockchain: 'TON'
             };
 
-            invoice = testSuccessResponse(await client.createInvoice(payload));
+            await client.createInvoice(payload)
+                .then((res) => {
+                    invoice = testSuccessResponse(res);
+                });
         });
 
         it('Endpoint /getInvoices', async () => {
-            const response = testSuccessResponse(await client.getInvoices());
-            expect(response.invoices.length).toBeGreaterThan(1);
+            await client.getInvoices()
+                .then((res) => {
+                    const response = testSuccessResponse(res);
+                    expect(response.invoices.length).toBeGreaterThan(1);
+                });
         });
 
         it('Endpoint /getInvoice', async () => {
-            const response = testSuccessResponse(await client.getInvoice(invoice.number));
-
-            expect(response).toEqual(invoice);
+            await client.getInvoice(invoice.number)
+                .then((res) => {
+                    expect(testSuccessResponse(res)).toEqual(invoice);
+                });
         });
 
         it('Endpoint /cancelInvoice', async () => {
-            const response = testSuccessResponse(await client.cancelInvoice(invoice.number));
-
-            expect(response.number).toEqual(invoice.number);
+            await client.cancelInvoice(invoice.number)
+                .then((res) => {
+                    const response = testSuccessResponse(res);
+                    expect(response.number).toEqual(invoice.number);
+                });
         });
 
         it('Endpoint /deleteInvoice', async () => {
-            const response = testSuccessResponse(await client.deleteInvoice(invoice.number));
-
-            expect(response).toEqual({
-                success: 'invoice.deleted',
-                message: 'Invoice deleted.'
-            });
+            await client.deleteInvoice(invoice.number)
+                .then((res) => {
+                    expect(testSuccessResponse(res)).toEqual({
+                        success: WebhookEvents.InvoiceDeleted,
+                        message: 'Invoice deleted.'
+                    });
+                });
         });
-
     });
 
     describe('Testing Withdraw Endpoints', () => {
@@ -119,11 +136,12 @@ describe('Testing API Endpoints', () => {
         it('Endpoint /getWithdrawMinimum', async () => {
             const payload: GetWithdrawMinimumBody = {
                 asset: 'TON',
-                network: 'testnet',
+                network: Network.testnet,
                 blockchain: 'TON'
             };
 
-            testSuccessResponse(await client.getWithdrawMinimum(payload));
+            await client.getWithdrawMinimum(payload)
+                .then((res) => testSuccessResponse(res));
         });
 
         it('Endpoint /getWithdrawFee', async () => {
@@ -131,11 +149,12 @@ describe('Testing API Endpoints', () => {
                 amount: 100,
                 to_address: TEST_TON_WALLET,
                 asset: 'TON',
-                network: 'testnet',
+                network: Network.testnet,
                 blockchain: 'TON'
             };
 
-            testSuccessResponse(await client.getWithdrawFee(payload));
+            await client.getWithdrawFee(payload)
+                .then((res) => testSuccessResponse(res));
         });
 
         it('Endpoint /withdraw', async () => {
@@ -143,18 +162,18 @@ describe('Testing API Endpoints', () => {
                 amount: 100,
                 to_address: TEST_TON_WALLET,
                 asset: 'TON',
-                network: 'testnet',
+                network: Network.testnet,
                 blockchain: 'TON'
             };
 
             const error = {
-                'error': 'unavailable',
-                'message': 'This action is temporarly unavailable.',
-            }
+                'error': 'withdrawal.insufficient-funds',
+                'message': 'Withdrawal failed. Insufficient funds.'
+            };
 
             await client.withdraw(payload)
                 .catch((err) => {
-                    expect(err.response.status).toBe(503);
+                    expect(err.response.status).toBe(401);
                     expect(err.response.data).toBeInstanceOf(Object);
                     expect(err.response.data).toEqual(error);
                 });
@@ -167,14 +186,14 @@ describe('Testing API Endpoints', () => {
             amount: 100,
             username: TEST_USERNAME,
             asset: 'TON',
-            network: 'testnet',
+            network: Network.testnet,
             blockchain: 'TON'
         };
 
         const error = {
             error: 'transfer.insufficient-funds',
             message: 'Transfer failed. Insufficient funds.'
-        }
+        };
 
         await client.transfer(payload)
             .catch((err) => {
@@ -185,16 +204,19 @@ describe('Testing API Endpoints', () => {
     });
 
     it('Generic function [/getMe]', async () => {
-        testSuccessResponse(await client.genericRequest(ApiMethod.GET, '/getMe'));
+        await client.genericRequest(ApiMethod.GET, '/getMe')
+            .then((res) => testSuccessResponse(res));
     });
 
     it('Generic function [/getWithdrawMinimum]', async () => {
         const payload: GetWithdrawMinimumBody = {
             asset: 'TON',
-            network: 'testnet',
+            network: Network.testnet,
             blockchain: 'TON'
         };
-        testSuccessResponse(await client.genericRequest(ApiMethod.POST, UrlHelper.getWithdrawMinimum, payload));
+
+        await client.genericRequest(ApiMethod.POST, UrlHelper.getWithdrawMinimum, payload)
+            .then((res) => testSuccessResponse(res));
     });
 
     describe('Testing WebHook Endpoints', () => {
@@ -203,59 +225,81 @@ describe('Testing API Endpoints', () => {
             const payload: WebhookBody = {
                 url: `https://api.example.com/webhook/${ require('crypto').randomBytes(8).toString('base64') }`,
                 active: true,
-                events: [WebhookEvents.InvoiceCompleted, WebhookEvents.InvoiceCancelled],
+                events: [ WebhookEvents.InvoiceCompleted, WebhookEvents.InvoiceCancelled ],
                 secret: require('crypto').randomBytes(64).toString('base64')
             };
 
-            webhook = testSuccessResponse(await client.createWebhook(payload));
+            await client.createWebhook(payload)
+                .then((res) => {
+                    webhook = testSuccessResponse(res);
+                });
         });
 
         it('Endpoint /getWebhook', async () => {
-            const response = testSuccessResponse(await client.getWebhook(webhook.id));
-            expect(response).toMatchObject(webhook);
+            await client.getWebhook(webhook.id)
+                .then((res) => {
+                    expect(testSuccessResponse(res)).toMatchObject(webhook);
+                });
         });
 
         it('Endpoint /getWebhooks', async () => {
-            const response: GetWebhooksResponse = testSuccessResponse(await client.getWebhooks());
-            expect(response.webhooks.map(w => w.id)).toContain(webhook.id);
+            await client.getWebhooks()
+                .then((res) => {
+                    const response: GetWebhooksResponse = testSuccessResponse(res);
+                    expect(response.webhooks.map(w => w.id)).toContain(webhook.id);
+                });
         });
 
         it('Endpoint /updateWebhook', async () => {
             const payload: WebhookBody = {
                 ...webhook,
-                events: [WebhookEvents.InvoiceExpired, WebhookEvents.InvoiceDeleted]
-            }
+                events: [ WebhookEvents.InvoiceExpired, WebhookEvents.InvoiceDeleted ]
+            };
 
-            webhook = testSuccessResponse(await client.updateWebhook(webhook.id, payload));
-            expect(webhook.events).toEqual(payload.events);
+            await client.updateWebhook(webhook.id, payload)
+                .then((res) => {
+                    webhook = testSuccessResponse(res);
+                    expect(webhook.events).toEqual(payload.events);
+                });
         });
 
         it('Endpoint /activateWebhook', async () => {
             const payload: StatusWebhookBody = {
                 asset: 'TON',
-                network: 'testnet',
+                network: Network.testnet,
                 blockchain: 'TON'
             };
 
-            webhook = testSuccessResponse(await client.activateWebhook(webhook.id, payload));
-            expect(webhook.active).toBeTruthy();
+            await client.activateWebhook(webhook.id, payload)
+                .then((res) => {
+                    webhook = testSuccessResponse(res);
+                    expect(webhook.active).toBeTruthy();
+                });
         });
 
         it('Endpoint /deactivateWebhook', async () => {
             const payload: StatusWebhookBody = {
                 asset: 'TON',
-                network: 'testnet',
+                network: Network.testnet,
                 blockchain: 'TON'
             };
 
-            webhook = testSuccessResponse(await client.deactivateWebhook(webhook.id, payload));
-            expect(webhook.active).toBeFalsy();
+            await client.deactivateWebhook(webhook.id, payload)
+                .then((res) => {
+                    webhook = testSuccessResponse(res);
+                    expect(webhook.active).toBeFalsy();
+                });
         });
 
         it('Endpoint /deleteWebhook', async () => {
-
-            const response = testSuccessResponse(await client.deleteWebhook(webhook.id));
-            expect(response).toMatchObject({ success: 'webhook.deleted', message: 'Webhook deleted.' });
+            await client.deleteWebhook(webhook.id)
+                .then((res) => {
+                    const response = testSuccessResponse(res);
+                    expect(response).toMatchObject({
+                        success: 'webhook.deleted',
+                        message: 'Webhook deleted.'
+                    });
+                });
         });
 
     });
@@ -266,4 +310,4 @@ const testSuccessResponse = (response: AxiosResponse): any => {
     expect(response.status).toBeGreaterThanOrEqual(200);
     expect(response.data).toBeInstanceOf(Object);
     return response.data;
-}
+};
