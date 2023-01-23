@@ -2,7 +2,7 @@
 
 ![TelePay Node](https://github.com/TelePay-cash/telepay-node/blob/main/docs/cover.jpg?raw=true)
 
-Official TelePay client library for NodeJS, so you can easely process cryptocurrency payments using the REST API.
+Official TelePay client library for NodeJS, so you can easily process cryptocurrency payments using the REST API.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![CI](https://github.com/TelePay-cash/telepay-node/actions/workflows/main.yml/badge.svg)](https://github.com/TelePay-cash/telepay-node/actions/workflows/main.yml)
@@ -89,7 +89,7 @@ balance. [Read docs](https://telepay.readme.io/reference/getbalance-1)
 const data: GetOneBalanceBody = {
     asset: 'TON',
     blockchain: 'TON',
-    network: 'testnet'
+    network: Network.testnet
 }
 
 const response = await telepayClient.getOneBalance(data);
@@ -112,7 +112,7 @@ Get asset details. [Read docs](https://telepay.readme.io/reference/getasset)
 ```typescript
  const data: GetOneAssetBody = {
     asset: 'TON',
-    network: 'testnet',
+    network: Network.testnet,
     blockchain: 'TON'
 };
 
@@ -191,7 +191,7 @@ Creates an invoice, associated to your merchant. [Read docs](https://telepay.rea
 const data: CreateInvoiceBody = {
     asset: 'TON',
     amount: 100,
-    network: 'testnet',
+    network: Network.testnet,
     blockchain: 'TON'
 };
 
@@ -257,7 +257,7 @@ const data: TransferBody = {
     amount: 10,
     username: 'TEST_USERNAME',
     asset: 'TON',
-    network: 'testnet',
+    network: Network.testnet,
     blockchain: 'TON'
 };
 
@@ -282,7 +282,7 @@ asset. [Read docs](https://telepay.readme.io/reference/getwithdrawminimum)
 ```typescript
 const data: GetWithdrawMinimumBody = {
     asset: 'TON',
-    network: 'testnet',
+    network: Network.testnet,
     blockchain: 'TON'
 };
 
@@ -309,7 +309,7 @@ const data: WithdrawBody = {
     amount: 10,
     to_address: 'TEST_TON_WALLET',
     asset: 'TON',
-    network: 'testnet',
+    network: Network.testnet,
     blockchain: 'TON'
 };
 
@@ -336,7 +336,7 @@ const data: WithdrawBody = {
     amount: 10,
     to_address: 'TEST_TON_WALLET',
     asset: 'TON',
-    network: 'testnet',
+    network: Network.testnet,
     blockchain: 'TON'
 };
 
@@ -450,7 +450,7 @@ Activates a webhook. [Read docs](https://telepay.readme.io/reference/activateweb
 const webhook_id = 123;
 const data: StatusWebhookBody = {
     asset: 'TON',
-    network: 'testnet',
+    network: Network.testnet,
     blockchain: 'TON'
 };
 
@@ -475,7 +475,7 @@ Deactivates a webhook. [Read docs](https://telepay.readme.io/reference/deactivat
 const webhook_id = 123;
 const data: StatusWebhookBody = {
     asset: 'TON',
-    network: 'testnet',
+    network: Network.testnet,
     blockchain: 'TON'
 };
 
@@ -542,7 +542,7 @@ The library is made by ([emoji key](https://allcontributors.org/docs/en/emoji-ke
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://zahirinatzuke.com"><img src="https://avatars.githubusercontent.com/u/41224027?v=4" width="100px;" alt=""/><br /><sub><b>Yohan González Almaguer</b></sub></a><br /><a href="https://github.com/telepay-cash/telepay-node/commits?author=ZahiriNatZuke" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/zahirinatzuke"><img src="https://avatars.githubusercontent.com/u/41224027?v=4" width="100px;" alt=""/><br /><sub><b>Yohan González Almaguer</b></sub></a><br /><a href="https://github.com/telepay-cash/telepay-node/commits?author=ZahiriNatZuke" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/pedrocastellanos"><img src="https://avatars.githubusercontent.com/u/53188140?v=4" width="100px;" alt=""/><br /><sub><b>Pedro Castellanos</b></sub></a><br /><a href="https://github.com/telepay-cash/telepay-node/commits?author=pedrocastellanos" title="Code">💻</a></td>
     <td align="center"><a href="https://lugodev.com"><img src="https://avatars.githubusercontent.com/u/18733370?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Carlos Lugones</b></sub></a><br /><a href="https://github.com/telepay-cash/telepay-node/commits?author=lugodev" title="Mentoring">🧑‍🏫</a></td>
   </tr>
