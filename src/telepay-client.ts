@@ -99,7 +99,7 @@ export class TelepayClient {
      * Get asset details.
      */
     public getAsset = (data: GetOneAssetBody): Promise<AxiosResponse<Asset>> =>
-        this.axios.post(UrlHelper.getAsset, { data });
+        this.axios.post(UrlHelper.getAsset, data);
 
     /**
      * @link Documentation: https://telepay.readme.io/reference/getassets

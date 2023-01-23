@@ -1,6 +1,6 @@
 # NodeJS SDK for the TelePay API
 
-![TelePay Node](https://github.com/TelePay-cash/telepay-node/blob/main/docs/cover.jpg?raw=true)
+![TelePay Node](https://github.com/TelePay-cash/telepay-node/blob/main/docs/cover.png?raw=true)
 
 Official TelePay client library for NodeJS, so you can easily process cryptocurrency payments using the REST API.
 
@@ -544,7 +544,7 @@ The library is made by ([emoji key](https://allcontributors.org/docs/en/emoji-ke
   <tr>
     <td align="center"><a href="https://github.com/zahirinatzuke"><img src="https://avatars.githubusercontent.com/u/41224027?v=4" width="100px;" alt=""/><br /><sub><b>Yohan González Almaguer</b></sub></a><br /><a href="https://github.com/telepay-cash/telepay-node/commits?author=ZahiriNatZuke" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/pedrocastellanos"><img src="https://avatars.githubusercontent.com/u/53188140?v=4" width="100px;" alt=""/><br /><sub><b>Pedro Castellanos</b></sub></a><br /><a href="https://github.com/telepay-cash/telepay-node/commits?author=pedrocastellanos" title="Code">💻</a></td>
-    <td align="center"><a href="https://lugodev.com"><img src="https://avatars.githubusercontent.com/u/18733370?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Carlos Lugones</b></sub></a><br /><a href="https://github.com/telepay-cash/telepay-node/commits?author=lugodev" title="Mentoring">🧑‍🏫</a></td>
+    <td align="center"><a href="https://carloslugones.com"><img src="https://avatars.githubusercontent.com/u/18733370?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Carlos Lugones</b></sub></a><br /><a href="https://github.com/telepay-cash/telepay-node/commits?author=CarlosLugones" title="Mentoring">🧑‍🏫</a></td>
   </tr>
 </table>
 <!-- markdownlint-restore -->
