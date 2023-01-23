@@ -7,6 +7,7 @@ export interface Merchant {
     logo_thumbnail_url: string,
     verified: boolean,
     username: string,
+    is_active: boolean,
     public_profile: string,
     owner: Owner,
     created_at: string,

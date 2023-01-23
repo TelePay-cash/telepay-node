@@ -1,4 +1,3 @@
 export interface Metadata {
-    color: string,
-    size: string
+    [k: string]: any;
 }

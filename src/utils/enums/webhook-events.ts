@@ -1,17 +1,15 @@
 export enum WebhookEvents {
     AllEvents = 'all',
+    InvoiceCreated = 'invoice.created',
     InvoiceCompleted = 'invoice.completed',
-    InvoiceCancelled = 'invoice.cancelled',
     InvoiceExpired = 'invoice.expired',
+    InvoiceCancelled = 'invoice.cancelled',
     InvoiceDeleted = 'invoice.deleted',
-    /**
-     *   [Coming Soon]
-     *   WithdrawalCreated = 'withdrawal.created',
-     *   WithdrawalApproved = 'withdrawal.approved',
-     *   WithdrawalAuditing = 'withdrawal.auditing',
-     *   WithdrawalPerforming = 'withdrawal.performing',
-     *   WithdrawalConfirming = 'withdrawal.confirming',
-     *   WithdrawalFailed = 'withdrawal.failed',
-     *   WithdrawalCompleted = 'withdrawal.completed',
-     */
+    WithdrawalPending = 'withdrawal.pending',
+    WithdrawalAuditing = 'withdrawal.auditing',
+    WithdrawalApproved = 'withdrawal.approved',
+    WithdrawalPerforming = 'withdrawal.performing',
+    WithdrawalConfirming = 'withdrawal.confirming',
+    WithdrawalCompleted = 'withdrawal.completed',
+    WithdrawalFailed = 'withdrawal.failed'
 }

@@ -1,13 +1,15 @@
+import { Network } from '../enums';
+
 /**
  * required:
  *  asset: string => default: 'TON',
  *  blockchain: string => default: 'TON'
  *
  * optional:
- *  network: string => default: 'mainnet'
+ *  network: Network => default: 'mainnet'
  */
 export interface StatusWebhookBody {
     asset: string,
     blockchain: string,
-    network?: string
+    network?: Network
 }

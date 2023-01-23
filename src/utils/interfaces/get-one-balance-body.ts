@@ -1,11 +1,13 @@
+import { Network } from '../enums';
+
 /**
  * required:
  *  asset: string => default: 'TON',
  *  blockchain: string => default: 'TON'
- *  network: string => default: 'mainnet'
+ *  network: Network => default: 'mainnet'
  */
 export interface GetOneBalanceBody {
     asset: string,
     blockchain: string,
-    network: string
+    network: Network
 }
