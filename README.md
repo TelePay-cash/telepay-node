@@ -1,6 +1,6 @@
 # NodeJS SDK for the TelePay API
 
-![TelePay Node](https://github.com/TelePay-cash/telepay-node/blob/main/docs/cover.jpg?raw=true)
+![TelePay Node](https://github.com/TelePay-cash/telepay-node/blob/main/docs/cover.png?raw=true)
 
 Official TelePay client library for NodeJS, so you can easily process cryptocurrency payments using the REST API.
 
